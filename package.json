@@ -1,0 +1,14 @@
+{
+	"author": "Pierre Voisin <pierre.voisin@gmail.com>",
+	"node": "command",
+	"version": 0.1,
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/pvoisin/node-command"
+	},
+	"main": "command.js",
+	"engines": {
+		"node": "~0.6.14"
+	},
+	"dependencies": {}
+}
