@@ -2,8 +2,7 @@ var EventEmitter = require("events").EventEmitter;
 var ChildProcess = require("child_process");
 
 /**
- * Constructor for Command objects.
- *
+ * @class
  * @param {String} expression Expression of the command to create.
  */
 var Command = (function() {
@@ -145,7 +144,7 @@ var Command = (function() {
 })();
 
 /**
- * Constructor for Batch objects.
+ * @class Batch of commands.
  *
  * @param {String[]|Command[]} expressions Expressions, commands or a mix of those two to be added to this batch initially.
  * @see Batch#add
