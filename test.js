@@ -1,4 +1,4 @@
-var Command = require("./command");
+var Command = require("./command").Command;
 
 var expressions = [
 	"grep -lR unix /var/log",
@@ -6,20 +6,19 @@ var expressions = [
 ];
 
 expressions.forEach(function(expression) {
-	var command = Command.run(expression, function() {
-		console.log("\n" + command, command.getOutput().replace(/\n/g, "\n\t"));
-		var runningCommands = Command.getRunningCommands();
-		if(!runningCommands.length) {
-			console.log("All commands returned!");
-		}
-		else {
-			console.log("Some commands are still running:", runningCommands.map(function(command) { return command.toString(); }));
-		}
+	var command = Command.run(expression, function(command) {
+		var output = command.getOutput();
+		var errorOutput = command.getErrorOutput();
+		console.log("\n[COMMAND] \n\t" + command,
+			("\n-OUTPUT-\n" + output + (errorOutput ? "-ERROR-\n" + errorOutput : "")).replace(/\n/g, "\n\t\t"));
 	});
 });
 
 Command.batch(expressions, function(command) {
-	console.log("\n[BATCH] " + command, command.getOutput().replace(/\n/g, "\n\t"));
+	var output = command.getOutput();
+	var errorOutput = command.getErrorOutput();
+	console.log("\n[BATCH] \n\t" + command,
+		("\n-OUTPUT-\n" + output + (errorOutput ? "-ERROR-\n" + errorOutput : "")).replace(/\n/g, "\n\t\t"));
 }, function() {
 	console.log("[BATCH] All commands returned!");
 });
