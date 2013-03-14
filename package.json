@@ -1,7 +1,7 @@
 {
   "author": "Pierre Voisin <pierre.voisin@gmail.com>",
-  "node": "command",
-  "version": 0.1.0,
+  "name": "command",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/pvoisin/node-command"
