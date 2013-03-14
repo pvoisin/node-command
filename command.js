@@ -1,5 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var ChildProcess = require("child_process");
+var execute = require("exec-sync");
 
 /**
  * @class
@@ -22,18 +23,37 @@ var Command = (function() {
 		this.run = function(callback) {
 			running = true;
 
-			this.once("completed", callback);
+			callback && (typeof(callback) == "function") && this.once("completed", callback);
 
-			childProcess = ChildProcess.exec(expression, function(error) {
-				running = false;
-				exitCode = error ? error.code : 0;
-				output = arguments[1] || "";
-				errorOutput = arguments[2] || "";
+            if(typeof(callback) != "function") {
+                try {
+                    var result = execute(expression, true);
+                    exitCode = 0;
+                    output = result.stdout;
+                    errorOutput = result.stderr;
+                }
+                catch(error) {
+                    exitCode = -1;
+                    errorOutput = error.trace;
+                }
+                finally {
+                    running = false;
+                    emitter.emit("completed", self);
+                }
 
-				emitter.emit("completed", self);
-			});
+                return this;
+            }
+            else {
+                childProcess = ChildProcess.exec(expression, function(error) {
+                    running = false;
+                    exitCode = error ? error.code : 0;
+                    output = arguments[1] || "";
+                    errorOutput = arguments[2] || "";
+                    emitter.emit("completed", self);
+                });
 
-			return childProcess;
+                return childProcess;
+            }
 		};
 
 		/**
